@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Context>
+    <Parameter name="AppName" value="cbr-clm"/>
+<!-- url="jdbc:h2:tcp://localhost/~/trainingDS" -->
+<!-- url="jdbc:h2:mem:training" -->
+<Resource name="jdbc/trainingDS" auth="Container"
+              type="javax.sql.DataSource" driverClassName="org.h2.Driver"
+              url="jdbc:h2:tcp://localhost/~/trainingDS"
+              username="sa" password=""
+              maxActive="10" maxIdle="3"
+              initialSize="1"
+              removeAbandoned="true"
+              removeAbandonedTimeout="30"
+              testWhileIdle="true"                            
+              validationQuery="Select 1 From dual"
+              maxWait="-1"/>
+              
+          <!--     
+<Resource name="jms/connectionFactory" auth="Container"
+              type="org.apache.activemq.ActiveMQConnectionFactory"
+              factory="org.apache.activemq.jndi.JNDIReferenceFactory"
+              brokerURL="tcp://localhost:61616" brokerName="MyActiveMqBroker"/>
+    <Resource name="jms/outQueue" auth="Container"
+              type="org.apache.activemq.command.ActiveMQQueue"
+              factory="org.apache.activemq.jndi.JNDIReferenceFactory"
+              physicalName="OUT_QUEUE"/>
+              
+        -->       
+</Context>

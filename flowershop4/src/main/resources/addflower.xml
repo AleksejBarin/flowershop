@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+        
+       
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        				   http://www.springframework.org/schema/beans/spring-beans.xsd
+        				   http://www.springframework.org/schema/context
+        				   http://www.springframework.org/schema/context/spring-context.xsd
+						   http://www.springframework.org/schema/util 
+						   http://www.springframework.org/schema/util/spring-util.xsd">
+
+
+  <context:annotation-config/>
+      <context:component-scan base-package="com.accenture.flowershop4"/>
+    
+<import resource="classpath*:common-services.xml"/>
+ 
+ <bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor" />
+ 
+   
+     <bean id="fl1" class="model.entity.Flower">
+    	<property name="localName" value="myrtle" />
+    	<property name="scientName" value="myrtus" />
+		<property name="count" value="11" />
+    </bean> 
+     
+     <bean id="fl2" class="model.entity.Flower">
+    	<property name="localName" value="orchid" />
+    	<property name="scientName" value="phalaenopsis" />
+		<property name="count" value="5" />
+    </bean>     
+    
+      <bean id="fl3" class="model.entity.Flower">
+    	<property name="localName" value="rose" />
+    	<property name="scientName" value="rosa" />
+		<property name="count" value="7" />
+    </bean> 
+
+     <bean id="fl4" class="model.entity.Flower">
+    	<property name="localName" value="lily" />
+    	<property name="scientName" value="lilium" />
+		<property name="count" value="4" />
+    </bean>     
+ <!--  	
+<bean class="model.entity.User">
+		<property name="user" value="22" />
+    </bean>	 -->   
+      
+ <!-- xmlns:mvc="http://www.springframework.org/schema/mvc" -->      
+ <!--<bean class="model.entity.Flower"/>   верно 
+
+     <import resource="classpath:config/jaxws.xml"/>
+    <import resource="classpath*:common-services.xml"/>
+    
+    <bean id="myrtle" class="model.entity.Flower">
+    <property name="localName" value="myrtle" />
+    		<property name="scientName" value="myrtus" />
+		<property name="count" value="11" />
+    </bean> 
+ -->    
+	
+</beans>

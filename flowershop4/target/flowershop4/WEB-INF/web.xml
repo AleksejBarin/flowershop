@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+<web-app> 
+
+ 
+ <!-- 
+<web-app id="WebApp_ID" version="2.4"
+	xmlns="http://java.sun.com/xml/ns/j2ee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+-->
+ <!--  
+	<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+                        http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+                        version="3.0">
+
+	
+-->
+  <display-name>Archetype Created Web Application</display-name>
+  
+  <context-param>
+      <param-name>contextConfigLocation</param-name>
+       <param-value>classpath:application-context.xml</param-value>
+  </context-param>  
+
+<!-- 
+
+   <filter>
+  	<filter-name>TrueFindFilter</filter-name>
+  	<display-name>TrueFindFilter</display-name>
+  	<description></description>
+  	<filter-class>com.accenture.flowershop.filters.TrueFindFilter</filter-class>
+  </filter>
+
+  <filter-mapping>
+  	<filter-name>TrueFindFilter</filter-name>
+  	 <url-pattern>/Registration</url-pattern>   	       
+  </filter-mapping> -->
+  
+ 
+ <listener>
+      <listener-class>
+	org.springframework.web.context.ContextLoaderListener       
+       </listener-class>       
+  </listener>   
+  <listener>
+      <listener-class>
+	org.springframework.web.context.request.RequestContextListener      
+       </listener-class>       
+  </listener>  
+   
+    <servlet>
+        <servlet-name>Dispatcher</servlet-name>
+        <servlet-class>com.accenture.flowershop.servlets.Dispatcher</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CheckUser</servlet-name>
+        <servlet-class>com.accenture.flowershop.servlets.CheckUser</servlet-class>
+    </servlet>    
+    <servlet>
+        <servlet-name>AddUser</servlet-name>
+        <servlet-class>com.accenture.flowershop.servlets.AddUser</servlet-class>
+    </servlet>  
+    <servlet>
+        <servlet-name>OrderFlower</servlet-name>
+        <servlet-class>com.accenture.flowershop.servlets.OrderFlower</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Registration</servlet-name>
+        <servlet-class>com.accenture.flowershop.servlets.Registration</servlet-class>
+    </servlet>  
+     <servlet>
+        <servlet-name>AddLegalEntityUser</servlet-name>
+        <servlet-class>com.accenture.flowershop.servlets.AddLegalEntityUser</servlet-class>
+    </servlet>  
+  <!--      
+   <servlet>
+       <servlet-name>CXFServlet</servlet-name>
+       <servlet-class>org.apache.cxf.transport.servlet.CXFServlet</servlet-class>
+       <load-on-startup>1</load-on-startup>
+   </servlet>
+   
+   
+
+	<servlet>
+		<servlet-name>jersey-serlvet</servlet-name>
+		<servlet-class>                      
+                      org.glassfish.jersey.servlet.ServletContainer    
+                </servlet-class>
+		<init-param>			   	      
+		       <param-name>jersey.config.server.provider.packages</param-name>		     
+		     <param-value>com.accenture.flowershop.rest</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>jersey-serlvet</servlet-name>
+		<url-pattern>/rest/*</url-pattern>
+	</servlet-mapping>   
+
+   
+--><!--
+   <servlet-mapping>
+       <servlet-name>CXFServlet</servlet-name>
+       <url-pattern>/ws/*</url-pattern> 	  URL to access web services 29-03 
+   </servlet-mapping>
+    --> 
+    
+    
+    
+    <servlet-mapping>
+        <servlet-name>AddLegalEntityUser</servlet-name>
+        <url-pattern>/AddLegalEntityUser</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Registration</servlet-name>
+        <url-pattern>/Registration</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Dispatcher</servlet-name>
+        <url-pattern>/Dispatcher</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CheckUser</servlet-name>
+        <url-pattern>/CheckUser</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddUser</servlet-name>
+        <url-pattern>/AddUser</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>OrderFlower</servlet-name>
+        <url-pattern>/OrderFlower</url-pattern>
+    </servlet-mapping>
+  
+
+
+    
+
+    <session-config><session-timeout>
+
+            30
+
+        </session-timeout></session-config><welcome-file-list><welcome-file>
+
+
+            login.html           
+          <!--OrderFin.jsp-->
+
+        </welcome-file></welcome-file-list>     
+  </web-app>

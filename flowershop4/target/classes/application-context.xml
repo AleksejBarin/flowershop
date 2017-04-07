@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"          
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:jee="http://www.springframework.org/schema/jee" 
+       xmlns:jaxws="http://cxf.apache.org/jaxws"
+       
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        				   http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd						   
+						   http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+						   http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd	
+						   http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd					   
+						   http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd">
+
+
+  <context:annotation-config/>
+  <context:component-scan base-package="com.accenture.flowershop"/>
+  <tx:annotation-driven/> 
+  
+  <import resource="classpath:META-INF/cxf/cxf.xml" />
+  <import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+  <!-- 
+<jee:jndi-lookup id="connectionFactoryfromap" jndi-name="jms/connectionFactory"/>    
+<jee:jndi-lookup id="esbToMcpRequestQueue" jndi-name="jms/queue/mainQueue"/>
+   -->
+<!-- Service implementor bean -->
+<bean id="OrderService" class="com.accenture.flowershop.business.OrderServiceImpl" />
+ <!--JAX-WS endpoint bean which is picked up by CXF -->
+<jaxws:endpoint id="OrderService1" implementor="#OrderService"  
+	address="/OrderService"/> 
+	
+
+  
+  
+  
+     <bean id="CustomerIntegrationService" class= "com.accenture.flowershop.business.CustomerIntegrationService">
+        <property name="marshaller" ref="castorMarshaller" />
+        <property name="unmarshaller" ref="castorMarshaller" />
+    </bean>   
+    <bean id="castorMarshaller" 	class="org.springframework.oxm.castor.CastorMarshaller"/>
+  
+    
+    
+	<bean   id="entityManagerFactory" 
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"  
+		depends-on="flyway">
+        <property name="dataSource" ref="dataSource"/>
+         
+           <property name="packagesToScan">
+            <list><value>com.accenture.flowershop.*</value></list>               
+        </property>
+       
+       
+        <property name="jpaVendorAdapter">        
+        <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+            <property name="database" value="H2" />        <!-- было ORACLE -->
+             <property name="generateDdl" value="false"/>
+             <property name="showSql" value="true"/>
+        </bean>
+        </property>
+        <property name="jpaDialect">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect" />
+        </property>
+        <property name="jpaProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.H2Dialect</prop>
+				<prop key="hibernate.show_sql">true</prop>
+			</props>
+		</property>
+	</bean>
+
+  
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager"> 
+		<property name="entityManagerFactory" ref="entityManagerFactory" /> 
+	</bean> 
+
+<jee:jndi-lookup id="dataSource" jndi-name="jdbc/trainingDS"/> 
+
+ <bean id="flyway" class="org.flywaydb.core.Flyway" init-method="migrate">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="locations">
+            <array>
+                <value>dbscripts</value>
+            </array>
+       </property>
+        <property name="baselineOnMigrate" value="false"/>
+        <property name="outOfOrder" value="true"/>
+        <property name="sqlMigrationPrefix" value="v"/>
+        <property name="sqlMigrationSeparator" value="__"/>
+        
+        <property name="placeholderPrefix" value="@{"/>
+        <property name="placeholderSuffix" value="}"/>
+    </bean>
+
+
+
+	
+</beans>

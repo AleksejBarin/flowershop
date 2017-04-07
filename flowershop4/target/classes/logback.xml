@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+ 
+<configuration>
+
+	<property name="DEV_HOME" value="c:/logs" />
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<Pattern>
+				%d{} [%thread] %-5level %logger{36} - %msg%n
+			</Pattern>
+		</layout>
+	</appender>
+
+	<appender name="To1mylogger"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">		 
+		<file>${DEV_HOME}/1mylogger.log</file>
+		
+		    <filter class="ch.qos.logback.classic.filter.LevelFilter">
+      <level>WARN</level>
+      <onMatch>ACCEPT</onMatch>
+      <onMismatch>NEUTRAL</onMismatch>
+    </filter>
+		    <filter class="ch.qos.logback.classic.filter.LevelFilter">
+      <level>ERROR</level>
+      <onMatch>ACCEPT</onMatch>
+      <onMismatch>DENY</onMismatch>
+    </filter>		
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<Pattern>
+				%d{} - %msg%n
+			</Pattern>
+		</encoder>
+
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			
+			<fileNamePattern>${DEV_HOME}/archived/error.%d{}.%i.log
+                        </fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>50MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+
+	</appender>
+
+<!--
+<appender-ref ref="To1mylogger" />
+<appender-ref ref="STDOUT" />
+ 	</root>
+	
+
+	<root level="debug">
+		
+		
+	</root>
+	<root level="error">
+	<appender-ref ref="To1mylogger" />	
+	
+	<logger name="Registrationlogger1" level="warn" additivity="false">
+	 <appender-ref ref="STDOUT" />
+		<appender-ref ref="To1mylogger" />
+	</logger> 				
+-->		
+	<logger name="servlets" level="debug"/>
+
+  <root level="info" >
+    <appender-ref ref="To1mylogger" />
+     <appender-ref ref="STDOUT" />
+  </root>
+
+	
+
+		
+
+</configuration>
