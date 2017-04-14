@@ -5,10 +5,12 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 
+import javax.jms.JMSException;
 //import javax.jms.JMSException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
@@ -27,27 +29,25 @@ import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import com.accenture.flowershop.business.CustomerIntegrationService;
 import com.accenture.flowershop.business.FlowerService;
 import com.accenture.flowershop.business.UserListService;
+import com.accenture.flowershop.messager.MessagerService;
 import com.accenture.flowershop.model.entity.Flower;
 import com.accenture.flowershop.model.entity.IndividualCustomer;
 import com.accenture.flowershop.model.entity.LegalEntityCustomer;
 import com.accenture.flowershop.model.entity.User;
 import com.accenture.flowershop.model.entity.UserAddress;
-//import org.apache.http.cookie.Cookie;       закомментил чтобы добавить http cookie
 @Transactional
 public class Registration extends Dispatcher {
-	
 
-
-    /**
-	 * 
-	 */
 	private static final long serialVersionUID = 1461715797965410712L;
 	public String userLoginSession = "1";
-
+	private Flower flowerreg = null;
+	
 	@Autowired
 	private FlowerService flowerService;
 	@Autowired
 	private UserListService userListService;
+	@Autowired
+	private MessagerService messagerService;
 	// Вставить метод в сервлет, чтобы в него можно было инжектить другие бины.
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
@@ -66,8 +66,8 @@ public class Registration extends Dispatcher {
     throws ServletException, IOException {
     	
    	 	//List<Flower> flList = flowerService.SortFlowersByLocalName();//
-        //request.setAttribute("flList", flList);
-        //RequestDispatcher dispatcher = request.getRequestDispatcher("/OrderFin.jsp");//
+   	 	
+        //request.setAttribute("flList", flList);        
 
         
         if (request.getParameter("login")!=null){
@@ -95,11 +95,7 @@ public class Registration extends Dispatcher {
            	 	session.setMaxInactiveInterval(30*60);
            	 	Cookie loginCookie = new Cookie(userLogin,"user");
            	 	loginCookie.setMaxAge(3*60);
-           	 	response.addCookie(loginCookie); 
-           	 	
-
-                
-           	 	
+           	 	response.addCookie(loginCookie);            	 	
            	 	
         		this.forward("/OrderFin.jsp", request, response); 
         	}else{
@@ -168,22 +164,42 @@ public class Registration extends Dispatcher {
         		
 			ApplicationContext context =  new ClassPathXmlApplicationContext("application-context.xml");
 			CustomerIntegrationService converter = (CustomerIntegrationService)context.getBean("CustomerIntegrationService");			
-			UserAddress userAddress = new UserAddress();
-			User customer = new User("er","dw","grtgrt","",23,userAddress);
+			UserAddress userAddress = new UserAddress();			
+			User customer = new User("er","dw","uiui","",23,userAddress);
 			converter.convertFromObjectToXML(customer,propFileName);
 			User customer2 = (User)converter.convertFromXMLToObject(propFileName);
 			out.println(customer2.getPassword());
-
-
-			//    flList.addFlower((Flower)context.getBean("fl2"));
         	
         	//flowerListService.sortFlowerNameByCount();
         	//this.forward("/OrderFin.jsp", request, response);
 
         }else if (request.getParameter("sortmyflowerdesc")!=null) {    
         	
+        	User user = userListService.findUser("e");
+        	PrintWriter out = response.getWriter();
 
-           	this.forward("/OrderFin.jsp", request, response);
+        	
+    		String res = "";
+    		try {
+    			messagerService.CreateCon();
+    			//messagerService.CreateCon("e",10);
+    			messagerService.SendEntityUserMessage(user);
+    			messagerService.CreateCon();
+    			res = messagerService.readFile("input.xml", StandardCharsets.UTF_8);
+    			//res = messagerService.GetMessages();
+    			//messagerService.deleteMessageFromQueue(res);
+    			
+    		} catch (IOException e1) {
+    			// TODO Auto-generated catch block
+    			e1.printStackTrace();
+    		}catch (JMSException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    		out.println(res);
+
+        	
+           	//this.forward("/OrderFin.jsp", request, response);
            	
            	
         } else if (request.getParameter("findinn")!=null) {
@@ -282,41 +298,49 @@ public class Registration extends Dispatcher {
         		user.getShopCard().add(userShopCard); ///       
         			HttpSession session = request.getSession();
         		session.setAttribute(flower.getLocalName(), count); */
-        }//else
-        List<Flower> flowersListReg = flowerService.SortFlowersByLocalName();       //flowerListService.getList();
+        }else if(request.getParameter("I Want To Buy")!=null){
+        	PrintWriter out = response.getWriter();
+        	boolean except = false;
+        	String username = request.getParameter("NumberOfFlowers");
+            try{
+            	int numberFlower = (Integer.parseInt(username));          	   
+            }catch(Exception e){            	   
+            	out.println("Wrong Number :     "+username);  
+            	except = true;
+            }
+            if (!except){
+        		HttpSession session = request.getSession();        		   		
+        		String userLogin = (String) session.getAttribute("user");
+        		
+        		if (userLogin.equals(null)){out.println("us"); }
+        		
+        		userListService.orderSeveralFlowersByPrice10(flowerreg.getLocalName(), userLogin, Integer.parseInt(username));
+    	   	 	List<Flower> flList = flowerService.SortFlowersByLocalName();
+    	        request.setAttribute("flList", flList);
+    	        this.forward("/OrderFin.jsp", request, response); 
+            	//out.println(username);           	
+            }
+  
+        }else if(request.getParameter("test")!=null){
+        	this.forward("/TestPage.jsp", request, response); 
+        }
+        List<Flower> flowersListReg = flowerService.SortFlowersByLocalName();      
     	for(Flower fl : flowersListReg){
     		if (request.getParameter(fl.getLocalName())!=null){
-    			/*User user = userListService.findUser("2");
-    			if (user!=null){
-    				OrderUser orderUser = new OrderUser(user);
-    				userListService.addOrderUser(orderUser);
-    				
-    				//List<OrderUser> i = null;// = userListService.findOrder("1");
-    				List<OrderUser> i1 = userListService.findOrder1("1");
-    				List<OrderUser> i2 = userListService.findOrder2("2");
-    				response.setContentType("text/html");
-    				PrintWriter out = response.getWriter();
-    				//if (!i.isEmpty() && (i!=null)){    			}
-    				out.println("dssdssdsdsd"+Integer.toString(i1.size()));
-    				out.println("dssdssdsdsd"+Integer.toString(i2.size()));
-    			}*/
-        		HttpSession session = request.getSession();        		   		
+
+      /*  		HttpSession session = request.getSession();        		   		
         		String userLogin = (String) session.getAttribute("user");
     			
     			//User user = userListService.findUser(userLogin);
     			userListService.orderOneFlowerByPrice10(fl.getLocalName(), userLogin);
     	   	 	List<Flower> flList = flowerService.SortFlowersByLocalName();//
-    	        request.setAttribute("flList", flList);
-    	        
-
-    			//
-    			this.forward("/OrderFin.jsp", request, response); 
-    			
-    			
+    	        request.setAttribute("flList", flList);*/
+    			flowerreg = fl;
+    	        request.setAttribute("flower", fl);
+    	        this.forward("/buyFlower.jsp", request, response);   
+    			//this.forward("/OrderFin.jsp", request, response);    			
 
     		}
-    			
-	
     	}
         
     }

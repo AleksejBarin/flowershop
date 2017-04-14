@@ -51,48 +51,12 @@ NameFlower: <input type="text" name="localName or scientName" size="20"><br>
 
               </small>
               
-              
-          <small>
+            <small>
 
-              <input type="submit" name="sortmyflower" value="SortFlowerAsc">
+              <input type="submit" name="test" value="Test">
 
-              </small>  
-          <small>
-
-              <input type="submit" name="sortmyflowerdesc" value="SortFlowerDesc">
-
-              </small>    
-              
-                                     
-          <small>
-
-              <input type="submit" name="showcookie" value="ShowCookie">
-
-              </small> <br>
-
-          <small>
-
-              <input type="submit" name="findinn" value="findinn">
-
-              </small> 
-              
-          <small>
-
-              <input type="submit" name="findsurname" value="findsurname">
-
-              </small> 
-              
-          <small>
-
-              <input type="submit" name="findname" value="findlogin">
-
-              </small>    
-              
-          <small>
-
-              <input type="submit" name="findinn2" value="findinn2">
-
-              </small>             
+              </small>            
+          
 	</form>
 </body>
 </html>

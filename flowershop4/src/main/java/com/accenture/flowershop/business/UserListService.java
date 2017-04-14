@@ -34,6 +34,8 @@ public interface UserListService{
 	
 	void addnewUserShopCart(UserShopCart newUserShopCart);
 	
+	boolean ChangeUserDiscount(String userLogin,Integer discount);
+	
 	List<LegalEntityCustomer> findCustomerByInn(String inn);
 	
 	List<IndividualCustomer> findCustomerBySurname(String surname);
@@ -47,5 +49,7 @@ public interface UserListService{
 	List<OrderUser> findOrder2(String userLogin);
 	
 	boolean addOrderItem(OrderItem newOrderItem);
+	
+    boolean orderSeveralFlowersByPrice10(String flowerLocalName, String userlogin,int numberFlower);
 
 }

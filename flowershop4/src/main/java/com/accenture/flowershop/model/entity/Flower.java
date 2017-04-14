@@ -20,8 +20,8 @@ public class Flower {
 
 	public int flowerCount;
 	   
-   @OneToMany(fetch = FetchType.EAGER,mappedBy="flower")
-   private List<OrderItem> orderItemList = new ArrayList<OrderItem>();
+	@OneToMany(fetch = FetchType.EAGER,mappedBy="flower")
+	private List<OrderItem> orderItemList = new ArrayList<OrderItem>();
    
    public  void addDocument(OrderItem oi)   {
 	   orderItemList.add(oi);	
@@ -40,10 +40,10 @@ public class Flower {
 		this.flowerCount = 0;		   
 	}
 	
-	public void descrease() 
+	public void descrease(int number) 
 	{
-		if(this.flowerCount > 0)
-			this.flowerCount--;
+		if(this.flowerCount > number)
+			this.flowerCount = flowerCount - number;
 	}
 	
 	public String getLocalName(){return localName;}

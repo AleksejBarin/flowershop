@@ -1,9 +1,16 @@
 package com.accenture.flowershop.business;
 
 
+import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
+import javax.jms.JMSException;
+import javax.jms.TextMessage;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import org.springframework.oxm.Marshaller;
@@ -54,6 +61,39 @@ public class CustomerIntegrationService {
 		}
 	}
 
+	public Object convertFromXMLToObject(TextMessage message) throws IOException {
+		
+    	Properties prop = new Properties();
+    	String propFileName = "conf.properties";    	
+    	InputStream  input = new FileInputStream("conf.properties");
+
+    	try {          		
+    		prop.load(input); 
+    		propFileName = prop.getProperty("fileForMarshall");
+    	}catch (IOException ex) {
+    		ex.printStackTrace();
+    	}
+    	
+    	try {
+    	    BufferedWriter out = new BufferedWriter(new FileWriter(propFileName));
+    	    try {
+				out.write(message.getText());
+			} catch (JMSException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}  
+    	    out.close();
+    	}
+    	catch (IOException e)
+    	{
+    	    System.out.println("Exception ");
+
+    	}
+    	
+    	return convertFromXMLToObject(propFileName);
+    	
+	}
+	
 }
 
 

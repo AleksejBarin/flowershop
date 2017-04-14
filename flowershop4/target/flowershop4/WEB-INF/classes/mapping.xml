@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mapping>
+	<class name="com.accenture.flowershop.messager.CustomerDiscount">
+
+		<map-to xml="customer" />
+
+		<field name="userlog" type="string">
+			<bind-xml name="userlog" node="attribute" />
+		</field>
+		
+		<field name="discount" type="integer">
+			<bind-xml name="discount" node="attribute" />
+		</field>
+
+	</class>
+	
+ 
+	<class name="com.accenture.flowershop.model.entity.User">
+
+		<map-to xml="customer1" />
+
+		<field name="userlogin" type="string">
+			<bind-xml name="userlogin" node="attribute" />
+		</field>
+		
+		<field name="username" type="string">
+			<bind-xml name="username" node="attribute" />
+		</field>
+		
+		<field name="password" type="string">
+			<bind-xml name="password" node="attribute" />
+		</field>				
+
+		<field name="phone" type="string">
+			<bind-xml name="phone" node="attribute" />
+		</field>	
+		
+		<field name="userAddress" type="com.accenture.flowershop.model.entity.UserAddress">
+			<bind-xml name="userAddress" node="element" />
+		</field>	
+		
+		<field name="deposite" type="double">
+			<bind-xml name="deposite" node="attribute" />
+		</field>	
+					
+	</class>
+<!-- -->
+
+	
+</mapping>

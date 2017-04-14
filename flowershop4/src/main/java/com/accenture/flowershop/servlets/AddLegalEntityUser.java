@@ -2,6 +2,7 @@ package com.accenture.flowershop.servlets;
 
 import java.io.IOException;
 
+import javax.jms.JMSException;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -12,13 +13,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.accenture.flowershop.business.UserListService;
+import com.accenture.flowershop.messager.MessagerService;
 import com.accenture.flowershop.model.entity.LegalEntityCustomer;
 import com.accenture.flowershop.model.entity.User;
 import com.accenture.flowershop.model.entity.UserAddress;
 public class AddLegalEntityUser extends Dispatcher {
 
 	@Autowired
-	private UserListService userListService;	
+	private UserListService userListService;
+	@Autowired
+	private MessagerService messagerService;
 
 	private static final long serialVersionUID = 4054414597069364373L;
 	private static final Logger LOG = 	LoggerFactory.getLogger(AddUser.class);
@@ -55,8 +59,15 @@ public class AddLegalEntityUser extends Dispatcher {
             boolean res = userListService.addUser(newUser);  
             if (res) {   
                userListService.addLegalEntityCustomer(legalEntityCustomer);
+               try {
+				messagerService.SendEntityUserMessage(newUser);
+			} catch (JMSException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
                LOG.info("Customer with name =    "+newUser.getUserName()+"  password =   " + newUser.getPassword()+
             	"    was created "+newUser.getDiscount());
+               request.setAttribute("newUser", newUser);
                this.forward("/successRegistration.jsp", request, response);
             } else {
                this.forward("/errorRegistration.html", request, response);

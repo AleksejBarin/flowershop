@@ -1,9 +1,8 @@
 package com.accenture.flowershop.rest;
-/*
+
 import java.io.IOException;
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -29,9 +28,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 @Component			/// ???
 @Path("/hello")
-@Scope(value="session")*/
+@Scope(value="session")
 public class RestWebNumberOneService {
-/*	@Autowired
+	@Autowired
 	private FlowerService flowerService;
 	@Autowired
 	private UserListService userListService;
@@ -128,5 +127,5 @@ public class RestWebNumberOneService {
 	  UserShopCart newUserShopCart = new UserShopCart(user, userShopCartFlowername,Integer.parseInt(userShopCartCount));
 	  userListService.addnewUserShopCart(newUserShopCart);       
   }
-  */
+  
 }

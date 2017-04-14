@@ -22,10 +22,11 @@
   
   <import resource="classpath:META-INF/cxf/cxf.xml" />
   <import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
-  <!-- 
+  <!--   -->
 <jee:jndi-lookup id="connectionFactoryfromap" jndi-name="jms/connectionFactory"/>    
-<jee:jndi-lookup id="esbToMcpRequestQueue" jndi-name="jms/queue/mainQueue"/>
-   -->
+<jee:jndi-lookup id="outQueue" jndi-name="jms/outQueue"/>
+<jee:jndi-lookup id="inQueue" jndi-name="jms/inQueue"/>
+ 
 <!-- Service implementor bean -->
 <bean id="OrderService" class="com.accenture.flowershop.business.OrderServiceImpl" />
  <!--JAX-WS endpoint bean which is picked up by CXF -->
@@ -40,8 +41,10 @@
         <property name="marshaller" ref="castorMarshaller" />
         <property name="unmarshaller" ref="castorMarshaller" />
     </bean>   
-    <bean id="castorMarshaller" 	class="org.springframework.oxm.castor.CastorMarshaller"/>
-  
+ <!--    <bean id="castorMarshaller" 	class="org.springframework.oxm.castor.CastorMarshaller"/>	12-04 -->
+  	<bean id="castorMarshaller" class="org.springframework.oxm.castor.CastorMarshaller" >
+		<property name="mappingLocation" value="classpath:mapping.xml" />
+	</bean>
     
     
 	<bean   id="entityManagerFactory" 

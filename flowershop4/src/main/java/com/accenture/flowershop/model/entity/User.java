@@ -31,7 +31,7 @@ public class User  {
    private Integer discount;
    public double deposite;
    
-   @OneToMany(mappedBy="user")
+   @OneToMany(fetch = FetchType.EAGER,mappedBy="user")
    private List<UserShopCart> userShopCart = new ArrayList<UserShopCart>(); 
    
    public  void addUserShopCart(UserShopCart usc)   {
@@ -56,6 +56,10 @@ public class User  {
       super();
    }   
 
+   public String getUserlogin(){return userlogin;}  // for castor marshaller
+   public String getUsername(){return username;}  // for castor marshaller
+   public UserAddress getUserAddress(){return userAddress;}// for castor marshaller
+   
    public String getUserLogin(){return userlogin;}
 	   
    public void setUserLogin(String userlogin){this.userlogin = userlogin;}
@@ -87,5 +91,5 @@ public class User  {
    public List<OrderUser> getOrderList(){return orderList;}
 
    public List<UserShopCart> getShopCard(){return userShopCart;}
-
+   
 }

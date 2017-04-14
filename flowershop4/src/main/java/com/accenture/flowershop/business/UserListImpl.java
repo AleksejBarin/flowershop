@@ -28,6 +28,14 @@ public class UserListImpl implements UserListService{
     @PersistenceContext
     private EntityManager entityManager;
     
+    @Transactional
+    public boolean ChangeUserDiscount(String userLogin,Integer discount){
+    	User user = entityManager.find(User.class, userLogin);
+    	if(user.equals(null)) return false;
+		user.setDiscount(discount);	
+		entityManager.merge(user);
+    	return true;
+    }
     
     @Transactional
     public List<UserShopCart> findUserShopCart (String userLogin){
@@ -83,8 +91,34 @@ public class UserListImpl implements UserListService{
 		addOrderItem(newOrderItem);
 		OrderUser newOrderUser = new OrderUser(user);
 		addOrderUser(newOrderUser);
-		flower.descrease();
+		flower.descrease(1);
 		user.setDeposite(user.getDeposite()-10);
+		entityManager.merge(flower);
+		entityManager.merge(user);
+		
+		
+		entityManager.lock(flower, LockModeType.NONE);
+		entityManager.lock(user, LockModeType.NONE);
+		//entityManager.refresh(LockModeType.PESSIMISTIC_WRITE);
+       	return true;
+    }
+	
+	@Transactional   
+    public boolean orderSeveralFlowersByPrice10(String flowerLocalName, String userlogin,int numberFlower){
+		//entityManager.flush();
+		User user = entityManager.find(User.class, userlogin);
+		Flower flower = entityManager.find(Flower.class, flowerLocalName);
+		entityManager.lock(flower, LockModeType.PESSIMISTIC_WRITE);
+		entityManager.lock(user, LockModeType.PESSIMISTIC_WRITE);		
+		
+		UserShopCart newUserShopCart = new UserShopCart(user,flower.getLocalName(),numberFlower);
+		addnewUserShopCart(newUserShopCart);
+		OrderItem newOrderItem = new OrderItem(flower,numberFlower,10*numberFlower);
+		addOrderItem(newOrderItem);
+		OrderUser newOrderUser = new OrderUser(user);
+		addOrderUser(newOrderUser);
+		flower.descrease(numberFlower);
+		user.setDeposite(user.getDeposite()-10*numberFlower);
 		entityManager.merge(flower);
 		entityManager.merge(user);
 		
@@ -113,13 +147,11 @@ public class UserListImpl implements UserListService{
 		entityManager.persist( newLegalEntityCustomer ); 
 	}
 
-
 	@Transactional
 	public boolean addOrderUser(OrderUser orderUser){
 		entityManager.persist( orderUser );
 		return false;
 	}
-	
 	
 	@Transactional   
     public void addIndividualUser(IndividualCustomer newIndividualCustomer){
