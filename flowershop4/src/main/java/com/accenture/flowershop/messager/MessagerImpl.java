@@ -50,7 +50,7 @@ public class MessagerImpl implements MessagerService {
 		Connection connection = connectionFactoryfromap.createConnection();
 		connection.start();
 		Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-		CustomerDiscount cd = new CustomerDiscount("3",5);
+		CustomerDiscount cd = new CustomerDiscount("3",15);
 		String res = "";
 		try {
 			converter.convertFromObjectToXML(cd, "customer.xml");
@@ -102,7 +102,7 @@ public class MessagerImpl implements MessagerService {
 		connection.close();
 	}
 
-	public void CreateCon(String userlogin, int discount) throws JMSException {
+	public void CreateCon(String userlogin,Integer discount) throws JMSException {
 		ApplicationContext context =  new ClassPathXmlApplicationContext("application-context.xml");
 		ActiveMQConnectionFactory connectionFactoryfromap = (ActiveMQConnectionFactory)context.getBean("connectionFactoryfromap");
 		ActiveMQQueue outQueue = (ActiveMQQueue)context.getBean("outQueue");	
@@ -156,6 +156,10 @@ public class MessagerImpl implements MessagerService {
 		    	    }		    	    
 		       }
 		});
+		
+		producer.send(message);
+		
+		connection.close();
 	}
 	
 	public  String readFile(String path, Charset encoding) 

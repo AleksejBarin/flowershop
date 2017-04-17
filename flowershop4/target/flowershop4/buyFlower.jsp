@@ -27,7 +27,10 @@ request.setAttribute("flower", flower);
 <br>Number of flowers: <input type="text" name="NumberOfFlowers" size="20"><br>
 
 <input type="submit" name="I Want To Buy" value="I Want To Buy">
+<!-- 
 <a href="OrderFin.jsp">Cancel</a>
+ -->
+
 
 
 </form>

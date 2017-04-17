@@ -103,7 +103,7 @@ public class RestWebNumberOneService {
   @Path("/usercart/{userlogin}")
   public String getUserCart(@PathParam("userlogin") String userlogin){
 	  String out = "";
-	  for (UserShopCart usc :userListService.findUserShopCart(userlogin)){
+	  for (UserShopCart usc :userListService.findAllUserShopCart(userlogin)){
 		  out = out + usc.getFlowerName() + " " + usc.getCount()+"    ";
 	  }
 	  return out;
@@ -113,7 +113,7 @@ public class RestWebNumberOneService {
   @Produces({ MediaType.APPLICATION_JSON, MediaType.TEXT_PLAIN })
   @Path("/usercart/{userlogin}/count")
   public int getUserCartCount(@PathParam("userlogin") String userlogin){
-	  return userListService.findUserShopCart(userlogin).size();
+	  return userListService.findAllUserShopCart(userlogin).size();
   }    
   
   @POST

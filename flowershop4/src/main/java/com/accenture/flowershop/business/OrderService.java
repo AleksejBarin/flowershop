@@ -7,5 +7,5 @@ import javax.jws.WebService;
 public interface OrderService {
 	
 	void IncreaseCountAllFlowers( @WebParam(name = "count") int count);
-
+	
 }

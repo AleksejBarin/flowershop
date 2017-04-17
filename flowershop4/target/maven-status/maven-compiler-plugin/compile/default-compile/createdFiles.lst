@@ -30,4 +30,5 @@ com\accenture\flowershop\servlets\CheckUser.class
 com\accenture\flowershop\model\entity\Flower.class
 com\accenture\flowershop\rest\RestWebNumberOneService.class
 com\accenture\flowershop\business\OrderServiceImpl.class
+com\accenture\flowershop\messager\MessagerImpl$2.class
 com\accenture\flowershop\servlets\Registration.class

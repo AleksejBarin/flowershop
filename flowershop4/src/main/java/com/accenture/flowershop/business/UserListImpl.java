@@ -9,6 +9,7 @@ import javax.persistence.TypedQuery;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,8 +26,72 @@ public class UserListImpl implements UserListService{
    
 	private final static Logger LOG = LoggerFactory.getLogger(UserListImpl.class);
 	
+	@Autowired
+	FlowerService flowerService;
+	
     @PersistenceContext
     private EntityManager entityManager;
+    
+    public double getTotalSumOrder(String userLogin){
+    	List<UserShopCart> uscList = getUserShopCart(userLogin);
+    	double total = 0;
+    	for(UserShopCart usc : uscList){
+    		total = total + usc.getCount()*10;
+    	}
+    	return total;
+    }
+    
+	public String checkCountFlowersForBuyUserShopCart(String userLogin){
+		List<UserShopCart> resultList = getUserShopCart(userLogin);
+		for (UserShopCart usc : resultList){
+			Flower flower = flowerService.findFlowerByLocalName(usc.getFlowerName()); 
+			if (flower.getFlowerCount() < usc.getCount()) {return flower.getLocalName();}
+		}		 
+		return "";	
+	}
+    
+    @Transactional
+    public void buyUserShopCart (String userLogin){	
+		List<UserShopCart> resultList = getUserShopCart(userLogin);
+    	for (UserShopCart usc : resultList){    		  		
+    		orderSeveralFlowersByPrice10(usc.getFlowerName(),userLogin,usc.getCount());
+    		usc.setStatus("bought");
+    		entityManager.merge(usc);
+    	}   		
+    }
+    @Transactional
+    public void deleteUserShopCart(UserShopCart userShopCart){
+    	entityManager.remove(entityManager.contains(userShopCart) ? userShopCart : entityManager.merge(userShopCart));
+    }
+	@Transactional
+	public boolean addUserShopCart(UserShopCart userShopCart){
+    	//User user = entityManager.find(User.class, userLogin);
+    	//if(user.equals(null)) return false;
+		//user.setDiscount(discount);	
+		
+		List<UserShopCart> uscList = getUserShopCart(userShopCart.getUser().getUserLogin());
+		for (UserShopCart usc : uscList){
+			if (usc.getFlowerName().equals(userShopCart.getFlowerName())){
+				usc.addUserShopCartFlowerCount(userShopCart.getCount());
+				return true;
+			}
+		}
+		entityManager.merge(userShopCart);
+    	return true;		
+	}
+    
+	@Transactional
+    public List<UserShopCart> getUserShopCart (String userLogin){
+	
+		User user = entityManager.find(User.class, userLogin);
+    	TypedQuery<UserShopCart> q = (TypedQuery<UserShopCart>) entityManager.createQuery(
+    			//"SELECT c from  UserShopCart  AS c WHERE c.user = :user" , UserShopCart.class);
+    	"SELECT c from  UserShopCart  AS c WHERE c.user = :user and c.status = :status" , UserShopCart.class);
+    	q.setParameter("user", user);
+    	q.setParameter("status", "in batch");
+    	List<UserShopCart> resultList = q.getResultList();
+    	return resultList;
+    }
     
     @Transactional
     public boolean ChangeUserDiscount(String userLogin,Integer discount){
@@ -38,10 +103,9 @@ public class UserListImpl implements UserListService{
     }
     
     @Transactional
-    public List<UserShopCart> findUserShopCart (String userLogin){
+    public List<UserShopCart> findAllUserShopCart (String userLogin){
     	//User user = entityManager.find(User.class, userLogin); 
-    	//return user.getShopCard();
-    	
+    	//return user.getShopCard();    	
 		User user = entityManager.find(User.class, userLogin);
     	TypedQuery<UserShopCart> q = (TypedQuery<UserShopCart>) entityManager.createQuery(
     			"SELECT c from  UserShopCart  AS c WHERE c.user = :user" , UserShopCart.class);
@@ -111,8 +175,8 @@ public class UserListImpl implements UserListService{
 		entityManager.lock(flower, LockModeType.PESSIMISTIC_WRITE);
 		entityManager.lock(user, LockModeType.PESSIMISTIC_WRITE);		
 		
-		UserShopCart newUserShopCart = new UserShopCart(user,flower.getLocalName(),numberFlower);
-		addnewUserShopCart(newUserShopCart);
+		//UserShopCart newUserShopCart = new UserShopCart(user,flower.getLocalName(),numberFlower);
+		//addnewUserShopCart(newUserShopCart);
 		OrderItem newOrderItem = new OrderItem(flower,numberFlower,10*numberFlower);
 		addOrderItem(newOrderItem);
 		OrderUser newOrderUser = new OrderUser(user);
@@ -170,7 +234,6 @@ public class UserListImpl implements UserListService{
     	List<OrderUser> resultList = q.getResultList();
 		return resultList;
 	}		
-	
 	public List<LegalEntityCustomer> findCustomerByInn(String inn){		
     	TypedQuery<LegalEntityCustomer> q = (TypedQuery<LegalEntityCustomer>) entityManager.createQuery(
     			"SELECT c from  LegalEntityCustomer  AS c WHERE c.inn = :inn" , LegalEntityCustomer.class);

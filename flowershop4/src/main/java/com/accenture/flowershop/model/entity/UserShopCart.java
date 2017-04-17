@@ -25,11 +25,13 @@ public class UserShopCart {
 
 	private int userShopCartCount;
 	
+	private String status;	
 	
 	public UserShopCart(User user, String userShopCartFlowername, int userShopCartCount){
 		this.user = user;
 		this.userShopCartFlowername = userShopCartFlowername;
 		this.userShopCartCount = userShopCartCount;	
+		this.status = "in batch";
 	}
 	
 	public UserShopCart( ) {
@@ -50,10 +52,14 @@ public class UserShopCart {
 	
 	public User getUser(){return this.user;}
 	
+	public void setStatus(String status){this.status = status;}
+	
+	public String getStatus(){return this.status;}
+	
 	public void setUserShopCartId(int userShopCartId){this.userShopCartId = userShopCartId;}
 	
 	public int getUserShopCartId(){return this.userShopCartId;}
    
-
+	public void addUserShopCartFlowerCount(int flowerCount){this.userShopCartCount += flowerCount;}
 
 }

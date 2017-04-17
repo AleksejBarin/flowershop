@@ -1,4 +1,6 @@
 <%@page import="com.accenture.flowershop.model.entity.Flower"%>
+<%@page import="com.accenture.flowershop.model.entity.User"%>
+<%@page import="com.accenture.flowershop.model.entity.UserShopCart"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="javax.servlet.http.HttpServletRequest"%>
@@ -19,12 +21,14 @@
 
 
 <%
+List<UserShopCart> usclList = null;
 List<Flower> flList = (List<Flower>)request.getAttribute("flList");
+usclList = (List<UserShopCart>)request.getAttribute("usclList");
 %>
+<div style="float:left;">
 <table border=1><caption>FlowersGrid</caption>
 <tr><th>LocalName</th><th>ScientName</th><th>Count</th><th>ButtonBUY</th></tr> 
 <%  
-//response.
 if ((flList!=null)&&(!flList.isEmpty())){
 	for(Flower fl : flList){%>
 		<tr><td><%out.println(fl.getLocalName());%></td>
@@ -34,16 +38,45 @@ if ((flList!=null)&&(!flList.isEmpty())){
 	}	
 }
 %>
-
 </table>
-<br>
 NameFlower: <input type="text" name="localName or scientName" size="20"><br>
 
-          <small>
+	<small>
+	<input type="submit" name="findflower" value="Find Flower">
+	</small>
+</div>
 
-              <input type="submit" name="findflower" value="Find Flower">
 
-          </small>
+<div style="float:right;">
+<table border=1 ><caption>Batch</caption>
+<tr><th>LocalName</th><th>Count</th><th>Price</th><th>Sum</th></tr> 
+<%  
+double totalSum = 0;
+if ((usclList!=null)&&(!usclList.isEmpty())){
+	for(UserShopCart usc : usclList){%>
+		<tr><td><%out.println(usc.getFlowerName());%></td>
+		<td><% out.println(usc.getCount());%> </td>
+		<td><% out.println("10");%> </td>
+		<td><% out.println(usc.getCount()*10);%> </td>
+		<td> <input type="submit" name=<% out.println(usc.getFlowerName() + "reset");%> value=<% out.println("reset");%>></td>
+		</tr><%	
+		totalSum = totalSum + usc.getCount()*10;
+	}	
+}
+%>
+</table>
+
+<%	User user = (User)request.getAttribute("user"); %>
+  Total sum:    <%= totalSum%><br> 
+  Your deposite:    <%= user.getDeposite()%><br> 
+  
+	<small>
+	<input type="submit" name="buy" value="BuyAll">
+	</small>    
+	
+</div>
+<br>
+
 
           <small>
 
@@ -56,7 +89,7 @@ NameFlower: <input type="text" name="localName or scientName" size="20"><br>
               <input type="submit" name="test" value="Test">
 
               </small>            
-          
+        
 	</form>
 </body>
 </html>

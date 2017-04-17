@@ -2,7 +2,7 @@ package com.accenture.flowershop.business;
 
 import java.util.List;
 
-
+import com.accenture.flowershop.model.entity.Flower;
 import com.accenture.flowershop.model.entity.IndividualCustomer;
 import com.accenture.flowershop.model.entity.LegalEntityCustomer;
 import com.accenture.flowershop.model.entity.OrderItem;
@@ -12,11 +12,23 @@ import com.accenture.flowershop.model.entity.UserShopCart;
 
 
 
-public interface UserListService{	
+public interface UserListService{
+	
+	public String checkCountFlowersForBuyUserShopCart(String userLogin);
+	
+	public double getTotalSumOrder(String userLogin);
+	
+	public void buyUserShopCart (String userLogin);
+	
+	public void deleteUserShopCart(UserShopCart userShopCart);
+	
+	boolean addUserShopCart(UserShopCart userShopCart);
+	
+	List<UserShopCart> getUserShopCart (String userLogin);
 
 	boolean orderOneFlowerByPrice10(String flowerLocalName,String userLogin);
 	
-	List<UserShopCart> findUserShopCart (String userLogin);
+	List<UserShopCart> findAllUserShopCart (String userLogin);
 
 	User findUser(String userLogin);
 	

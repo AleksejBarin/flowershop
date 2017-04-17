@@ -28,6 +28,7 @@ import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.accenture.flowershop.business.CustomerIntegrationService;
 import com.accenture.flowershop.business.FlowerService;
+import com.accenture.flowershop.business.OrderService;
 import com.accenture.flowershop.business.UserListService;
 import com.accenture.flowershop.messager.MessagerService;
 import com.accenture.flowershop.model.entity.Flower;
@@ -35,6 +36,7 @@ import com.accenture.flowershop.model.entity.IndividualCustomer;
 import com.accenture.flowershop.model.entity.LegalEntityCustomer;
 import com.accenture.flowershop.model.entity.User;
 import com.accenture.flowershop.model.entity.UserAddress;
+import com.accenture.flowershop.model.entity.UserShopCart;
 @Transactional
 public class Registration extends Dispatcher {
 
@@ -48,6 +50,8 @@ public class Registration extends Dispatcher {
 	private UserListService userListService;
 	@Autowired
 	private MessagerService messagerService;
+	@Autowired
+	private OrderService orderService;
 	// Вставить метод в сервлет, чтобы в него можно было инжектить другие бины.
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
@@ -64,16 +68,11 @@ public class Registration extends Dispatcher {
     public void doPost(HttpServletRequest request, HttpServletResponse response)
 
     throws ServletException, IOException {
-    	
-   	 	//List<Flower> flList = flowerService.SortFlowersByLocalName();//
-   	 	
-        //request.setAttribute("flList", flList);        
-
         
         if (request.getParameter("login")!=null){
-	   	 	List<Flower> flList = flowerService.SortFlowersByLocalName();//
+	   	 	List<Flower> flList = flowerService.getFlowersWithPositiveCount();//
 	        request.setAttribute("flList", flList);
-	        RequestDispatcher dispatcher = request.getRequestDispatcher("/OrderFin.jsp");//
+	        
         	
         	
         	/*Flower newFlower = new Flower("rose","rosa",5);
@@ -95,7 +94,11 @@ public class Registration extends Dispatcher {
            	 	session.setMaxInactiveInterval(30*60);
            	 	Cookie loginCookie = new Cookie(userLogin,"user");
            	 	loginCookie.setMaxAge(3*60);
-           	 	response.addCookie(loginCookie);            	 	
+           	 	response.addCookie(loginCookie); 
+           	 	User user = userListService.findUser(userLogin);
+           	 	request.setAttribute("user", user);
+            	List<UserShopCart> usclList = userListService.getUserShopCart(userLogin);	   	 	
+    	        request.setAttribute("usclList", usclList);
            	 	
         		this.forward("/OrderFin.jsp", request, response); 
         	}else{
@@ -182,9 +185,10 @@ public class Registration extends Dispatcher {
     		String res = "";
     		try {
     			messagerService.CreateCon();
-    			//messagerService.CreateCon("e",10);
+    			//messagerService.CreateCon("6",10);
+    			String h="6"; Integer i = 53;
     			messagerService.SendEntityUserMessage(user);
-    			messagerService.CreateCon();
+    			messagerService.CreateCon(h,i);
     			res = messagerService.readFile("input.xml", StandardCharsets.UTF_8);
     			//res = messagerService.GetMessages();
     			//messagerService.deleteMessageFromQueue(res);
@@ -301,45 +305,85 @@ public class Registration extends Dispatcher {
         }else if(request.getParameter("I Want To Buy")!=null){
         	PrintWriter out = response.getWriter();
         	boolean except = false;
-        	String username = request.getParameter("NumberOfFlowers");
+        	String numberOfFlowers = request.getParameter("NumberOfFlowers");
             try{
-            	int numberFlower = (Integer.parseInt(username));          	   
+            	int numberFlower = (Integer.parseInt(numberOfFlowers));  
+            	if (numberFlower < 1) {
+            		except = true;
+            		out.println("Wrong Number :     "+numberOfFlowers);
+            	}
             }catch(Exception e){            	   
-            	out.println("Wrong Number :     "+username);  
+            	out.println("Wrong Number :     "+numberOfFlowers);  
             	except = true;
             }
+            
             if (!except){
         		HttpSession session = request.getSession();        		   		
         		String userLogin = (String) session.getAttribute("user");
-        		
-        		if (userLogin.equals(null)){out.println("us"); }
-        		
-        		userListService.orderSeveralFlowersByPrice10(flowerreg.getLocalName(), userLogin, Integer.parseInt(username));
-    	   	 	List<Flower> flList = flowerService.SortFlowersByLocalName();
+        		//userListService.orderSeveralFlowersByPrice10(flowerreg.getLocalName(), userLogin, Integer.parseInt(numberOfFlowers));
+        		User user = userListService.findUser(userLogin);
+        		UserShopCart usc = new UserShopCart(user,flowerreg.getLocalName(),Integer.parseInt(numberOfFlowers));
+        		userListService.addUserShopCart(usc);
+    	   	 	List<Flower> flList = flowerService.getFlowersWithPositiveCount();
     	        request.setAttribute("flList", flList);
+            	List<UserShopCart> usclList = userListService.getUserShopCart(userLogin);	   	 	
+    	        request.setAttribute("usclList", usclList);
+    	        request.setAttribute("user", user);
     	        this.forward("/OrderFin.jsp", request, response); 
             	//out.println(username);           	
             }
   
         }else if(request.getParameter("test")!=null){
         	this.forward("/TestPage.jsp", request, response); 
+        	
+        }else if(request.getParameter("buy")!=null){
+        	//userListService.getUserShopCart(userLogin);
+        	
+        	PrintWriter out = response.getWriter();
+    		HttpSession session = request.getSession();        		   		
+    		String userLogin = (String) session.getAttribute("user");
+    		User user = userListService.findUser(userLogin);
+    		if (!userListService.checkCountFlowersForBuyUserShopCart(userLogin).equals("")){
+    			out.println("There is too many" + userListService.checkCountFlowersForBuyUserShopCart(userLogin));
+    		}else if (userListService.getTotalSumOrder(userLogin) > user.getDeposite()){ 
+    			out.println("There is not enough money on your account");
+    		}else {
+    			userListService.buyUserShopCart(userLogin);
+    	   	 	List<Flower> flList = flowerService.getFlowersWithPositiveCount();
+    	        request.setAttribute("flList", flList);
+            	List<UserShopCart> usclList = userListService.getUserShopCart(userLogin);	   	 	
+    	        request.setAttribute("usclList", usclList);
+    	        user = userListService.findUser(userLogin); //для рефреша депозита
+    	        request.setAttribute("user", user);
+    	        this.forward("/OrderFin.jsp", request, response); 
+    		}   
+
         }
-        List<Flower> flowersListReg = flowerService.SortFlowersByLocalName();      
+        
+        List<Flower> flowersListReg = flowerService.sortAllFlowersByLocalName();      
     	for(Flower fl : flowersListReg){
     		if (request.getParameter(fl.getLocalName())!=null){
 
-      /*  		HttpSession session = request.getSession();        		   		
-        		String userLogin = (String) session.getAttribute("user");
-    			
-    			//User user = userListService.findUser(userLogin);
-    			userListService.orderOneFlowerByPrice10(fl.getLocalName(), userLogin);
-    	   	 	List<Flower> flList = flowerService.SortFlowersByLocalName();//
-    	        request.setAttribute("flList", flList);*/
-    			flowerreg = fl;
+     			flowerreg = fl;
     	        request.setAttribute("flower", fl);
-    	        this.forward("/buyFlower.jsp", request, response);   
-    			//this.forward("/OrderFin.jsp", request, response);    			
-
+    	        this.forward("/buyFlower.jsp", request, response);       			
+    		}
+    		if (request.getParameter((fl.getLocalName())+"reset")!=null){
+        		HttpSession session = request.getSession();        		   		
+        		String userLogin = (String) session.getAttribute("user");
+        		User user = userListService.findUser(userLogin);
+        		List<UserShopCart> uscList = userListService.getUserShopCart(userLogin);
+        		for (UserShopCart usc : uscList){
+        			if (usc.getFlowerName().equals(fl.getLocalName())){
+        				userListService.deleteUserShopCart(usc);
+        			}
+        		}
+    	   	 	List<Flower> flList = flowerService.getFlowersWithPositiveCount();
+    	        request.setAttribute("flList", flList);
+            	List<UserShopCart> usclList = userListService.getUserShopCart(userLogin);	   	 	
+    	        request.setAttribute("usclList", usclList);
+    	        request.setAttribute("user", user);
+    	        this.forward("/OrderFin.jsp", request, response);    
     		}
     	}
         

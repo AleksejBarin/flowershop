@@ -8,6 +8,9 @@ import com.accenture.flowershop.model.entity.LegalEntityCustomer;
 import com.accenture.flowershop.model.entity.User;
 
 public interface FlowerService {
+	
+	List<Flower> getFlowersWithPositiveCount();
+	
 	List<Flower> findflowers();
 	
 	String SortOurFlowers();
@@ -18,7 +21,7 @@ public interface FlowerService {
 	
 	boolean addFlower(Flower flower);
 	
-	List<Flower> SortFlowersByLocalName();
+	List<Flower> sortAllFlowersByLocalName();
 	
 	void IncreaseCountAllFlowersByOne(int count);
 	

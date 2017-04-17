@@ -28,7 +28,7 @@ public class FlowerServiceImpl implements FlowerService{
 			
 	@Transactional
 	public void IncreaseCountAllFlowersByOne(int count){
-		List<Flower> flList = SortFlowersByLocalName(); 
+		List<Flower> flList = sortAllFlowersByLocalName(); 
 		for (Flower flower : flList){
 			flower.setFlowerCount(flower.getFlowerCount()+count);
 			entityManager.merge(flower);
@@ -40,15 +40,7 @@ public class FlowerServiceImpl implements FlowerService{
     	return flower;
     }	
 
-    public List<Flower> SortFlowersByLocalName(){
-    	
-    	
-    	
- /*   	TypedQuery<Flower> q = (TypedQuery<Flower>) entityManager.createQuery(
-    			"SELECT c from  Flower  AS c Order By localName" , Flower.class);
-    	List<Flower> resultList = q.getResultList();
-    	return resultList;*/
-    	//List<Flower> flList = new ;
+    public List<Flower> sortAllFlowersByLocalName(){
     	LOG.debug("SortFlowersByLocalName");
     	 List<Flower>    	 flList = (List<Flower>) entityManager.createQuery(
     			"SELECT c from  Flower  AS c Order By localName" , Flower.class).getResultList();
@@ -56,6 +48,14 @@ public class FlowerServiceImpl implements FlowerService{
     	 return flList;
     }
     
+    public List<Flower> getFlowersWithPositiveCount(){
+    	LOG.debug("SortFlowersByLocalName");
+    	 List<Flower>    	 flList = (List<Flower>) entityManager.createQuery(
+    			"SELECT c from  Flower  AS c WHERE c.flowerCount > 0" , Flower.class).getResultList();
+    	
+    	 LOG.debug("SortFlowersByLocalName2");
+    	 return flList;
+    }
     
     public Flower findFlowerByScientName(String scientName){
     	TypedQuery<Flower> q = (TypedQuery<Flower>) entityManager.createQuery(

@@ -11,7 +11,7 @@ public interface MessagerService {
 	
 	public void CreateCon() throws JMSException;
 	
-	public void CreateCon(String userlogin, int discount) throws JMSException;
+	public void CreateCon(String userlogin, Integer discount) throws JMSException;
 	
 	public void SendEntityUserMessage(User user)throws JMSException;
 	

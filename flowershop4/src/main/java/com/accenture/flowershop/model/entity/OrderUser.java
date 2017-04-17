@@ -30,7 +30,7 @@ public class OrderUser {
 	
 	public OrderUser(User user){
 		this.user = user;
-		this.status = "";
+		this.status = "in batch";
 		this.creationDate = Calendar.getInstance();
 		this.closingData = Calendar.getInstance();
 		this.sumOrder = 0;		

@@ -8,5 +8,7 @@ create table tb_UserShopCart
 	userShopCartFlowername  varchar(55),
 	
 	userShopCartCount int,
+	
+	status  varchar(55),
 
 );

@@ -42,8 +42,8 @@ public class Flower {
 	
 	public void descrease(int number) 
 	{
-		if(this.flowerCount > number)
-			this.flowerCount = flowerCount - number;
+		if(this.flowerCount >= number)
+			this.flowerCount -= number;
 	}
 	
 	public String getLocalName(){return localName;}
