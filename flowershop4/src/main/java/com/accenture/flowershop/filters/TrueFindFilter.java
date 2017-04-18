@@ -48,7 +48,7 @@ public class TrueFindFilter implements Filter {
 		//if (((HttpServletRequest) request).getParameter("findflower")!=null){
 		request.setCharacterEncoding("UTF-8");
 		response.setCharacterEncoding("UTF-8");
-		if (false){
+/*		if (false){
         	Flower flower = flowerService.findFlowerByLocalName(request.getParameter("localName or scientName"));
         	if (flower == null){
         		flower = flowerService.findFlowerByScientName(request.getParameter("localName or scientName"));        		
@@ -71,7 +71,7 @@ public class TrueFindFilter implements Filter {
                 			+ "</table></body></html>";
                		out.println(result); 
         	}  
-		}
+		}*/
 		
 		// pass the request along the filter chain
 		chain.doFilter(request, response);

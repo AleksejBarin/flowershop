@@ -3,16 +3,20 @@
     <Parameter name="AppName" value="cbr-clm"/>
 <!-- url="jdbc:h2:tcp://localhost/~/trainingDS" -->
 <!-- url="jdbc:h2:mem:training" -->
+<!-- не помогло connection.characterEncoding="UTF-8"
+connection.Charset="UTF-8" 18-04-->    
 <Resource name="jdbc/trainingDS" auth="Container"
-              type="javax.sql.DataSource" driverClassName="org.h2.Driver"
+              type="javax.sql.DataSource" driverClassName="org.h2.Driver"              
               url="jdbc:h2:tcp://localhost/~/trainingDS"
               username="sa" password=""
               maxActive="10" maxIdle="3"
               initialSize="1"
               removeAbandoned="true"
               removeAbandonedTimeout="30"
-              testWhileIdle="true"                            
+              testWhileIdle="true"                                             
               validationQuery="Select 1 From dual"
+              connection.СharacterEncoding="UTF-8"
+              connection.Charset="UTF-8"
               maxWait="-1"/>
               
               
@@ -20,11 +24,11 @@
               type="org.apache.activemq.ActiveMQConnectionFactory"
               factory="org.apache.activemq.jndi.JNDIReferenceFactory"
               brokerURL="tcp://localhost:61616" brokerName="MyActiveMqBroker"/>
-    <Resource name="jms/outQueue" auth="Container"
+<Resource name="jms/outQueue" auth="Container"
               type="org.apache.activemq.command.ActiveMQQueue"
               factory="org.apache.activemq.jndi.JNDIReferenceFactory"
               physicalName="OUT_QUEUE"/>
-         <Resource name="jms/inQueue" auth="Container"
+<Resource name="jms/inQueue" auth="Container"
               type="org.apache.activemq.command.ActiveMQQueue"
               factory="org.apache.activemq.jndi.JNDIReferenceFactory"
               physicalName="IN_QUEUE"/>

@@ -25,7 +25,7 @@ public class AddLegalEntityUser extends Dispatcher {
 	private MessagerService messagerService;
 
 	private static final long serialVersionUID = 4054414597069364373L;
-	private static final Logger LOG = 	LoggerFactory.getLogger(AddUser.class);
+	private static final Logger LOG = 	LoggerFactory.getLogger(AddLegalEntityUser.class);
 	
 	public String getServletInfo(){
         return "Add user servlet";
@@ -65,6 +65,7 @@ public class AddLegalEntityUser extends Dispatcher {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+               LOG.info(userlogin + "     "+ password);
                LOG.info("Customer with name =    "+newUser.getUserName()+"  password =   " + newUser.getPassword()+
             	"    was created "+newUser.getDiscount());
                request.setAttribute("newUser", newUser);

@@ -100,9 +100,9 @@ public class Registration extends Dispatcher {
            	 	HttpSession session = request.getSession();
            	 	session.setAttribute("user",userLogin);
            	 	session.setMaxInactiveInterval(30*60);
-           	 	Cookie loginCookie = new Cookie(userLogin,"user");
-           	 	loginCookie.setMaxAge(3*60);
-           	 	response.addCookie(loginCookie);            	 	
+           	 	//Cookie loginCookie = new Cookie(userLogin,"user");
+           	 	//loginCookie.setMaxAge(3*60);
+           	 	//response.addCookie(loginCookie);            	 	
     	        refreshPage(request,response);        		
         	}else{
         		 this.forward("/registration.html", request, response);

@@ -62,15 +62,20 @@
             <property name="database" value="H2" />        <!-- было ORACLE -->
              <property name="generateDdl" value="false"/>
              <property name="showSql" value="true"/>
+             
         </bean>
         </property>
         <property name="jpaDialect">
             <bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect" />
         </property>
+         
         <property name="jpaProperties">
             <props>
                 <prop key="hibernate.dialect">org.hibernate.dialect.H2Dialect</prop>
 				<prop key="hibernate.show_sql">true</prop>
+				  <prop key="hibernate.connection.Charset">UTF-8</prop>   <!-- 18-04 -->
+  <prop key="hibernate.connection.CharacterEncoding">UTF-8</prop><!-- 18-04 -->
+  <prop key="hibernate.connection.Useunicode">true</prop><!-- 18-04 -->
 			</props>
 		</property>
 	</bean>

@@ -77,19 +77,12 @@ if ((usclList!=null)&&(!usclList.isEmpty())){
 	
 </div>
 <br>
+<div style="position: absolute; left:50%; top:5%;width: 100px;height: 50px;">
 
-          <small>
-
-              <input type="submit" name="goout" value="Logout">
-
-              </small>
+   <small> <input type="submit" name="goout" value="Logout"> </small>
               
-            <small>
-
-              <input type="submit" name="test" value="Test">
-
-              </small>            
-        
+   <small> <input type="submit" name="test" value="Test"> </small>            
+</div>      
 	</form>
 </body>
 </html>

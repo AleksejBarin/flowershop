@@ -28,7 +28,7 @@
        <param-value>classpath:application-context.xml</param-value>
   </context-param>  
 
-<!-- 
+
 
    <filter>
   	<filter-name>TrueFindFilter</filter-name>
@@ -39,8 +39,10 @@
 
   <filter-mapping>
   	<filter-name>TrueFindFilter</filter-name>
-  	 <url-pattern>/Registration</url-pattern>   	       
-  </filter-mapping> -->
+	<url-pattern>/*</url-pattern>  	       
+  </filter-mapping> 
+  <!--<url-pattern>/flowershop4/*</url-pattern> 
+  <servlet-name>AddUser</servlet-name> -->
   
  
  <listener>

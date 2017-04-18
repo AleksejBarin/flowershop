@@ -18,7 +18,6 @@ com\accenture\flowershop\servlets\AddUser.class
 com\accenture\flowershop\business\UserListImpl.class
 com\accenture\flowershop\model\entity\IndividualCustomer.class
 com\accenture\flowershop\business\OrderService.class
-com\accenture\flowershop\servlets\OrderFlower.class
 com\accenture\flowershop\business\FlowerService.class
 com\accenture\flowershop\model\entity\LegalEntityCustomer.class
 com\accenture\flowershop\filters\TrueFindFilter.class
