@@ -14,7 +14,7 @@ public class OrderServiceImpl implements OrderService {
     private EntityManager entityManager;	
 	
 	public void IncreaseCountAllFlowers(int count){
-		flowerService.IncreaseCountAllFlowersByOne(count);
+		flowerService.increaseCountAllFlowersByOne(count);
 	}
 
 }

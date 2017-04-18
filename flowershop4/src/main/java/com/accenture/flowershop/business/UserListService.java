@@ -46,7 +46,7 @@ public interface UserListService{
 	
 	void addnewUserShopCart(UserShopCart newUserShopCart);
 	
-	boolean ChangeUserDiscount(String userLogin,Integer discount);
+	boolean changeUserDiscount(String userLogin,Integer discount);
 	
 	List<LegalEntityCustomer> findCustomerByInn(String inn);
 	

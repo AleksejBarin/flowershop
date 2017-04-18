@@ -79,7 +79,7 @@ public class MessagerImpl implements MessagerService {
 							if(obj instanceof CustomerDiscount){
 								CustomerDiscount cd2 = (CustomerDiscount)obj;
 								
-								userListService.ChangeUserDiscount(cd2.getUserlog(), cd2.getDiscount());
+								userListService.changeUserDiscount(cd2.getUserlog(), cd2.getDiscount());
 								LOG.info("SUCCESSWINDISC");
 							}else if(obj instanceof User){
 								LOG.info("SUCCESSWINUSER");
@@ -139,7 +139,7 @@ public class MessagerImpl implements MessagerService {
 							if(obj instanceof CustomerDiscount){
 								CustomerDiscount cd2 = (CustomerDiscount)obj;
 								
-								userListService.ChangeUserDiscount(cd2.getUserlog(), cd2.getDiscount());
+								userListService.changeUserDiscount(cd2.getUserlog(), cd2.getDiscount());
 								LOG.info("SUCCESSWINDISC");
 							}else if(obj instanceof User){
 								LOG.info("SUCCESSWINUSER");

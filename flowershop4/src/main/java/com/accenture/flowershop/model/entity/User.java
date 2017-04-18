@@ -57,7 +57,9 @@ public class User  {
    }   
 
    public String getUserlogin(){return userlogin;}  // for castor marshaller
+   
    public String getUsername(){return username;}  // for castor marshaller
+   
    public UserAddress getUserAddress(){return userAddress;}// for castor marshaller
    
    public String getUserLogin(){return userlogin;}

@@ -27,7 +27,7 @@ public class FlowerServiceImpl implements FlowerService{
 	private static final Logger LOG = 	LoggerFactory.getLogger(FlowerServiceImpl.class);
 			
 	@Transactional
-	public void IncreaseCountAllFlowersByOne(int count){
+	public void increaseCountAllFlowersByOne(int count){
 		List<Flower> flList = sortAllFlowersByLocalName(); 
 		for (Flower flower : flList){
 			flower.setFlowerCount(flower.getFlowerCount()+count);

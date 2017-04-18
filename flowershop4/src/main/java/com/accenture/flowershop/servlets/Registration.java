@@ -11,8 +11,6 @@ import java.util.List;
 import java.util.Properties;
 
 import javax.jms.JMSException;
-//import javax.jms.JMSException;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -28,7 +26,6 @@ import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.accenture.flowershop.business.CustomerIntegrationService;
 import com.accenture.flowershop.business.FlowerService;
-import com.accenture.flowershop.business.OrderService;
 import com.accenture.flowershop.business.UserListService;
 import com.accenture.flowershop.messager.MessagerService;
 import com.accenture.flowershop.model.entity.Flower;
@@ -41,7 +38,6 @@ import com.accenture.flowershop.model.entity.UserShopCart;
 public class Registration extends Dispatcher {
 
 	private static final long serialVersionUID = 1461715797965410712L;
-	public String userLoginSession = "1";
 	private Flower flowerreg = null;
 	
 	@Autowired
@@ -50,14 +46,11 @@ public class Registration extends Dispatcher {
 	private UserListService userListService;
 	@Autowired
 	private MessagerService messagerService;
-	@Autowired
-	private OrderService orderService;
 	// Вставить метод в сервлет, чтобы в него можно было инжектить другие бины.
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 	    SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
 	}	   
-
 
 	public String getServletInfo(){
 
@@ -65,16 +58,31 @@ public class Registration extends Dispatcher {
 
     }
 
-    public void doPost(HttpServletRequest request, HttpServletResponse response)
+    public void refreshPage(HttpServletRequest request ,HttpServletResponse response) throws ServletException, IOException{
+   	 	List<Flower> flList = flowerService.getFlowersWithPositiveCount();//
+        request.setAttribute("flList", flList);   
+		HttpSession session = request.getSession();        		   		
+		String userLogin = (String) session.getAttribute("user");
+    	List<UserShopCart> usclList = userListService.getUserShopCart(userLogin);	   	 	
+        request.setAttribute("usclList", usclList);
+		User user = userListService.findUser(userLogin);
+        user = userListService.findUser(userLogin); //для рефреша депозита
+        request.setAttribute("user", user);
+        this.forward("/OrderFin.jsp", request, response); 
+    }
+	
+    @Override 
+    protected void doGet(HttpServletRequest request,HttpServletResponse response) 
+    throws IOException,ServletException{
+    	refreshPage(request,response);
+        //this.doPost(request,response);
+    }
+    
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
 
     throws ServletException, IOException {
         
-        if (request.getParameter("login")!=null){
-	   	 	List<Flower> flList = flowerService.getFlowersWithPositiveCount();//
-	        request.setAttribute("flList", flList);
-	        
-        	
-        	
+        if (request.getParameter("login")!=null){        	
         	/*Flower newFlower = new Flower("rose","rosa",5);
         	flowerService.addFlower(newFlower);
         	newFlower = new Flower("myrtle","myrtus",7);
@@ -94,13 +102,8 @@ public class Registration extends Dispatcher {
            	 	session.setMaxInactiveInterval(30*60);
            	 	Cookie loginCookie = new Cookie(userLogin,"user");
            	 	loginCookie.setMaxAge(3*60);
-           	 	response.addCookie(loginCookie); 
-           	 	User user = userListService.findUser(userLogin);
-           	 	request.setAttribute("user", user);
-            	List<UserShopCart> usclList = userListService.getUserShopCart(userLogin);	   	 	
-    	        request.setAttribute("usclList", usclList);
-           	 	
-        		this.forward("/OrderFin.jsp", request, response); 
+           	 	response.addCookie(loginCookie);            	 	
+    	        refreshPage(request,response);        		
         	}else{
         		 this.forward("/registration.html", request, response);
         	}
@@ -171,16 +174,13 @@ public class Registration extends Dispatcher {
 			User customer = new User("er","dw","uiui","",23,userAddress);
 			converter.convertFromObjectToXML(customer,propFileName);
 			User customer2 = (User)converter.convertFromXMLToObject(propFileName);
-			out.println(customer2.getPassword());
-        	
-        	//flowerListService.sortFlowerNameByCount();
+			out.println(customer2.getPassword()); 
         	//this.forward("/OrderFin.jsp", request, response);
 
         }else if (request.getParameter("sortmyflowerdesc")!=null) {    
         	
         	User user = userListService.findUser("e");
         	PrintWriter out = response.getWriter();
-
         	
     		String res = "";
     		try {
@@ -200,9 +200,7 @@ public class Registration extends Dispatcher {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-    		out.println(res);
-
-        	
+    		out.println(res);        	
            	//this.forward("/OrderFin.jsp", request, response);
            	
            	
@@ -237,8 +235,7 @@ public class Registration extends Dispatcher {
         	List<User> resultList = userListService.findCustomerByUserlogin(userlogin);        	
         	if(resultList.isEmpty()){result = "No one Exemplar found";}
         	else{result = Integer.toString(resultList.size())+"   Exemplar found" ;} 
-        	out.println(result);            
-  
+        	out.println(result); 
         	
         } else if (request.getParameter("findinn2")!=null) {
 
@@ -251,9 +248,7 @@ public class Registration extends Dispatcher {
         	else{result = Integer.toString(resultList.size())+"   Exemplar found";} 
         	out.println(result);  
            	
-           	
         }else if (request.getParameter("showcookie")!=null) {
-        	
        	
     		response.setContentType("text/html");
     		PrintWriter out = response.getWriter();
@@ -275,33 +270,21 @@ public class Registration extends Dispatcher {
     		for(Cookie cookie:cookies){
     			if (session.getAttribute("user").equals(cookie.getName()))
     				out.println("Your cookie value=   "+cookie.getValue()+"<br>");
-    		}    		
-    		
-    	      Enumeration sesNames = session.getAttributeNames();
+    		}   
+    	      Enumeration<?> sesNames = session.getAttributeNames();        // <?>
     	       while (sesNames.hasMoreElements()) {
     	          String name = sesNames.nextElement().toString();
     	          Object value = session.getAttribute(name);
     	          out.println(name + " = " + value + "<br>");
     	       }
-    		
-    		
     		for(int i = 0; i < cookies.length; i++){
     			out.println("Name="+cookies[i].getName()+"<br>");
     			out.println("Value="+cookies[i].getValue()+"<br>");
     			cookies[i].setMaxAge(-1);
     		}
-
     		out.println("</BODY>");
     		out.println("</HTML>");   
-/*        	
-        		int count = Integer.parseInt(request.getParameter("count"));
-        		/*UserShopCart userShopCard = new UserShopCart();
-        		userShopCard.setCount(count);
-        		userShopCard.setFlowerName(flower.getLocalName());        		
-        		User user = UserList.findUser(userName);
-        		user.getShopCard().add(userShopCard); ///       
-        			HttpSession session = request.getSession();
-        		session.setAttribute(flower.getLocalName(), count); */
+
         }else if(request.getParameter("I Want To Buy")!=null){
         	PrintWriter out = response.getWriter();
         	boolean except = false;
@@ -319,26 +302,17 @@ public class Registration extends Dispatcher {
             
             if (!except){
         		HttpSession session = request.getSession();        		   		
-        		String userLogin = (String) session.getAttribute("user");
-        		//userListService.orderSeveralFlowersByPrice10(flowerreg.getLocalName(), userLogin, Integer.parseInt(numberOfFlowers));
+        		String userLogin = (String) session.getAttribute("user");        		
         		User user = userListService.findUser(userLogin);
         		UserShopCart usc = new UserShopCart(user,flowerreg.getLocalName(),Integer.parseInt(numberOfFlowers));
         		userListService.addUserShopCart(usc);
-    	   	 	List<Flower> flList = flowerService.getFlowersWithPositiveCount();
-    	        request.setAttribute("flList", flList);
-            	List<UserShopCart> usclList = userListService.getUserShopCart(userLogin);	   	 	
-    	        request.setAttribute("usclList", usclList);
-    	        request.setAttribute("user", user);
-    	        this.forward("/OrderFin.jsp", request, response); 
-            	//out.println(username);           	
+        		refreshPage(request,response);            	          	
             }
   
         }else if(request.getParameter("test")!=null){
         	this.forward("/TestPage.jsp", request, response); 
         	
-        }else if(request.getParameter("buy")!=null){
-        	//userListService.getUserShopCart(userLogin);
-        	
+        }else if(request.getParameter("buy")!=null){ 
         	PrintWriter out = response.getWriter();
     		HttpSession session = request.getSession();        		   		
     		String userLogin = (String) session.getAttribute("user");
@@ -349,13 +323,7 @@ public class Registration extends Dispatcher {
     			out.println("There is not enough money on your account");
     		}else {
     			userListService.buyUserShopCart(userLogin);
-    	   	 	List<Flower> flList = flowerService.getFlowersWithPositiveCount();
-    	        request.setAttribute("flList", flList);
-            	List<UserShopCart> usclList = userListService.getUserShopCart(userLogin);	   	 	
-    	        request.setAttribute("usclList", usclList);
-    	        user = userListService.findUser(userLogin); //для рефреша депозита
-    	        request.setAttribute("user", user);
-    	        this.forward("/OrderFin.jsp", request, response); 
+    			refreshPage(request,response);
     		}   
 
         }
@@ -378,12 +346,7 @@ public class Registration extends Dispatcher {
         				userListService.deleteUserShopCart(usc);
         			}
         		}
-    	   	 	List<Flower> flList = flowerService.getFlowersWithPositiveCount();
-    	        request.setAttribute("flList", flList);
-            	List<UserShopCart> usclList = userListService.getUserShopCart(userLogin);	   	 	
-    	        request.setAttribute("usclList", usclList);
-    	        request.setAttribute("user", user);
-    	        this.forward("/OrderFin.jsp", request, response);    
+        		refreshPage(request,response);
     		}
     	}
         

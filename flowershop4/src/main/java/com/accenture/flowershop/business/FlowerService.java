@@ -23,7 +23,7 @@ public interface FlowerService {
 	
 	List<Flower> sortAllFlowersByLocalName();
 	
-	void IncreaseCountAllFlowersByOne(int count);
+	void increaseCountAllFlowersByOne(int count);
 	
 	
 }

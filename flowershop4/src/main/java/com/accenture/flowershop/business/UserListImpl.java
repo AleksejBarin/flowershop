@@ -94,7 +94,7 @@ public class UserListImpl implements UserListService{
     }
     
     @Transactional
-    public boolean ChangeUserDiscount(String userLogin,Integer discount){
+    public boolean changeUserDiscount(String userLogin,Integer discount){
     	User user = entityManager.find(User.class, userLogin);
     	if(user.equals(null)) return false;
 		user.setDiscount(discount);	
@@ -266,8 +266,7 @@ public class UserListImpl implements UserListService{
     	List<User> resultList = q.getResultList();
 		return resultList;
 	}	
-	
-	
+		
 	public boolean loginUser(String login, String password) {
 		User user = entityManager.find(User.class, login);
 		if (!user.getPassword().equals(password)){return false;}

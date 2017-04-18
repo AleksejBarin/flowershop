@@ -13,7 +13,8 @@
 
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+
+<meta http-equiv="refresh" content="5";http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Insert title here</title>
 </head>
 <body>
@@ -27,7 +28,7 @@ usclList = (List<UserShopCart>)request.getAttribute("usclList");
 %>
 <div style="float:left;">
 <table border=1><caption>FlowersGrid</caption>
-<tr><th>LocalName</th><th>ScientName</th><th>Count</th><th>ButtonBUY</th></tr> 
+<tr><th>LocalName</th><th>ScientName</th><th>Count</th><th>ButtonBUY</th></tr>
 <%  
 if ((flList!=null)&&(!flList.isEmpty())){
 	for(Flower fl : flList){%>

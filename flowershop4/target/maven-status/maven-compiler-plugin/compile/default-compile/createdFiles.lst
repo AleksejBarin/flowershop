@@ -8,6 +8,7 @@ com\accenture\flowershop\model\entity\Storage.class
 com\accenture\flowershop\messager\MessagerImpl$1.class
 com\accenture\flowershop\model\entity\User.class
 com\accenture\flowershop\messager\MessagerImpl.class
+com\accenture\flowershop\servlets\ScheduleTask.class
 com\accenture\flowershop\servlets\AddLegalEntityUser.class
 com\accenture\flowershop\messager\JmsQueueSender$1.class
 com\accenture\flowershop\messager\JmsQueueSender.class
