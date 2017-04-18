@@ -77,7 +77,6 @@ if ((usclList!=null)&&(!usclList.isEmpty())){
 </div>
 <br>
 
-
           <small>
 
               <input type="submit" name="goout" value="Logout">
