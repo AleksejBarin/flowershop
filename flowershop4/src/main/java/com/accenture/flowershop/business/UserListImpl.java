@@ -45,7 +45,7 @@ public class UserListImpl implements UserListService{
 		List<UserShopCart> resultList = getUserShopCart(userLogin);
 		for (UserShopCart usc : resultList){
 			Flower flower = flowerService.findFlowerByLocalName(usc.getFlowerName()); 
-			if (flower.getFlowerCount() < usc.getCount()) {return flower.getLocalName();}
+			if (flower.getFlowerCount() < usc.getCount()) {return flower.getLocalName();}						
 		}		 
 		return "";	
 	}

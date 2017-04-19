@@ -14,19 +14,27 @@ public class Storage {
 	public String flowerLocalName;
 
 	public int flowersCount;
+	
+	public double price;
 	   
 	   
-	public Storage(String storageName, String flowerLocalName, int flowersCount) {
+	public Storage(String storageName, String flowerLocalName, int flowersCount, double price) {
 		// TODO Auto-generated constructor stub
 		this.storageName = storageName;
 		this.flowerLocalName = flowerLocalName;
 		this.flowersCount = flowersCount;
+		this.price = price;
 	} 
 	public Storage(){
 		this.storageName = "";
 		this.flowerLocalName = "";
-		this.flowersCount = 0;		   
+		this.flowersCount = 0;	
+		this.price = 0;
 	}
+	
+	public double getPrice(){return price;}
+	   
+	public void setPrice(double price){this.price = price;}
 	   
 	public String getStorageName(){return storageName;}
 	   
@@ -36,9 +44,9 @@ public class Storage {
 
 	public void setFlowerLocalName(String flowerLocalName){this.flowerLocalName = flowerLocalName;}
 
-	public int getflowersCount(){return flowersCount;}
+	public int getFlowersCount(){return flowersCount;}
 
-	public void setflowersCount(int flowersCount){this.flowersCount = flowersCount;}
+	public void setFlowersCount(int flowersCount){this.flowersCount = flowersCount;}
 
 }
 

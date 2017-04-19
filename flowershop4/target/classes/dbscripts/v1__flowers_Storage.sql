@@ -7,4 +7,6 @@ create table tb_Storage
 
 	flowersCount  int,
 	
+	price double,
+	
 );

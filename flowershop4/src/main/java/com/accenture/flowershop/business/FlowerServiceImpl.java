@@ -30,7 +30,7 @@ public class FlowerServiceImpl implements FlowerService{
 	public void increaseCountAllFlowersByOne(int count){
 		List<Flower> flList = sortAllFlowersByLocalName(); 
 		for (Flower flower : flList){
-			flower.setFlowerCount(flower.getFlowerCount()+count);
+			flower.setFlowerCount(flower.getFlowerCount()+count);         
 			entityManager.merge(flower);
 		}
 	}
@@ -93,7 +93,7 @@ public class FlowerServiceImpl implements FlowerService{
     	for (Flower fl : flList){ 
     		buttonName = fl.getLocalName();
     	    result = result+"<tr><td>"+fl.getLocalName()+"</td><td>"
-    		+fl.getScientName()+"</td><td>"+fl.getFlowerCount()
+    		+fl.getScientName()+"</td><td>"+fl.getFlowerCount()		
     		+"</td><td><button onclick=myFunction(this)>"+buttonName+"</button></td></tr>";
        	}     	
     	result = result+"<input type=\"button\" onclick=\"history.back();\" value=\"Back\"/>"

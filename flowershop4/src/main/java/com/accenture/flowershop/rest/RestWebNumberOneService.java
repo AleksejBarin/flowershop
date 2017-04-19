@@ -94,7 +94,7 @@ public class RestWebNumberOneService {
   public int getOrderItemByFlower2(@PathParam("Flowerweb") String localName){
 	  Flower flower = flowerService.findFlowerByLocalName(localName);
 	  //Flower flower = new Flower("pineapple","rose",2);
-	    return flower.getFlowerCount();
+	    return flower.getFlowerCount();	    
   }
   
 

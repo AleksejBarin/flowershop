@@ -10,5 +10,7 @@ create table tb_UserShopCart
 	userShopCartCount int,
 	
 	status  varchar(55),
+	
+	storage varchar(55),
 
 );

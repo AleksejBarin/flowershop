@@ -13,9 +13,8 @@
 
 <html>
 <head>
-
-<meta http-equiv="refresh" content="5";http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<meta http-equiv="refresh" content="15";http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 </head>
 <body>
   <form action="Registration" method="post">
@@ -42,9 +41,10 @@ if ((flList!=null)&&(!flList.isEmpty())){
 </table>
 NameFlower: <input type="text" name="localName or scientName" size="20"><br>
 
-	<small>
-	<input type="submit" name="findflower" value="Find Flower">
-	</small>
+    <button type="submit" name="findflower" value="Find Flower" class="btn btn-info">
+      <span class="glyphicon glyphicon-search"></span> Search Flower
+    </button>
+
 </div>
 
 

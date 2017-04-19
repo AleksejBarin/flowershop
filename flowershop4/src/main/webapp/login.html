@@ -7,8 +7,18 @@
     <title>Enter</title>
 
   </head>
-
+<!-- скрипт для процедуры логаута -->
   <body>
+
+  <script>
+
+history.pushState(null, null, location.href);
+window.onpopstate = function(event) {
+    history.go(1);
+};  
+  
+  </script>
+
 
   <br>
 

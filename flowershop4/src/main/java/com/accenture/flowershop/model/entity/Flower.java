@@ -37,13 +37,12 @@ public class Flower {
 	public Flower(){
 		this.localName = "";
 		this.scientName = "";
-		this.flowerCount = 0;		   
+		this.flowerCount = 0;
 	}
 	
 	public void descrease(int number) 
 	{
-		if(this.flowerCount >= number)
-			this.flowerCount -= number;
+		this.flowerCount = (this.flowerCount >= number) ? this.flowerCount-number : this.flowerCount;     //19-04
 	}
 	
 	public String getLocalName(){return localName;}

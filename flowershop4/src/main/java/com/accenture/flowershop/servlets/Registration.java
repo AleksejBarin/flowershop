@@ -5,6 +5,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
 import java.util.List;
@@ -74,8 +76,7 @@ public class Registration extends Dispatcher {
     @Override 
     protected void doGet(HttpServletRequest request,HttpServletResponse response) 
     throws IOException,ServletException{
-    	refreshPage(request,response);
-        //this.doPost(request,response);
+    	refreshPage(request,response);        
     }
     
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -83,26 +84,25 @@ public class Registration extends Dispatcher {
     throws ServletException, IOException {
         
         if (request.getParameter("login")!=null){        	
-        	/*Flower newFlower = new Flower("rose","rosa",5);
+        	Flower newFlower = new Flower("rose","rosa",32);
         	flowerService.addFlower(newFlower);
-        	newFlower = new Flower("myrtle","myrtus",7);
+        	newFlower = new Flower("myrtle","myrtus",43);
         	flowerService.addFlower(newFlower);
-        	newFlower = new Flower("orchid","phalaenopsis",6);
+        	newFlower = new Flower("orchid","phalaenopsis",41);
         	flowerService.addFlower(newFlower);
-        	newFlower = new Flower("lily","lilium",5);
-        	flowerService.addFlower(newFlower);*/
-        	//List<Flower> lfl = flowerService.SortFlowersByLocalName();
-        	
-        	
+        	newFlower = new Flower("lily","lilium",15);
+        	flowerService.addFlower(newFlower);/**/
+        	        	
         	String UserPswd = request.getParameter("password");
         	String userLogin = request.getParameter("user");
         	if (userListService.loginUser(userLogin, UserPswd)){
            	 	HttpSession session = request.getSession();
            	 	session.setAttribute("user",userLogin);
            	 	session.setMaxInactiveInterval(30*60);
-           	 	//Cookie loginCookie = new Cookie(userLogin,"user");
-           	 	//loginCookie.setMaxAge(3*60);
-           	 	//response.addCookie(loginCookie);            	 	
+           	 	String safeCookieName = URLEncoder.encode(userLogin, "UTF-8");
+           	 	String safeCookieValue = URLEncoder.encode("user", "UTF-8");
+           	 	response.addCookie(new Cookie(safeCookieName, safeCookieValue));
+           	 	//loginCookie.setMaxAge(3*60);            	 	
     	        refreshPage(request,response);        		
         	}else{
         		 this.forward("/registration.html", request, response);
@@ -144,8 +144,8 @@ public class Registration extends Dispatcher {
         	}
         	
         } else if (request.getParameter("goout")!=null) {
-
-            this.forward("/login.html", request, response);
+        	
+        	  this.forward("/login.html", request, response);
 
         }else if (request.getParameter("sortmyflower")!=null) {
         	PrintWriter out = response.getWriter();
@@ -270,14 +270,17 @@ public class Registration extends Dispatcher {
     		for(Cookie cookie:cookies){
     			if (session.getAttribute("user").equals(cookie.getName()))
     				out.println("Your cookie value=   "+cookie.getValue()+"<br>");
-    		}   
+    		} 
     	      Enumeration<?> sesNames = session.getAttributeNames();        // <?>
     	       while (sesNames.hasMoreElements()) {
     	          String name = sesNames.nextElement().toString();
     	          Object value = session.getAttribute(name);
     	          out.println(name + " = " + value + "<br>");
-    	       }
+    	       }          	 	
     		for(int i = 0; i < cookies.length; i++){
+    			out.println("Cookie # "+ i +"<br>");
+    			String safeCookieName = URLDecoder.decode(cookies[i].getName(), "UTF-8");
+    			out.println("Name="+safeCookieName+"<br>");
     			out.println("Name="+cookies[i].getName()+"<br>");
     			out.println("Value="+cookies[i].getValue()+"<br>");
     			cookies[i].setMaxAge(-1);

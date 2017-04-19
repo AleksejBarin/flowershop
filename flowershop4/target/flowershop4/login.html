@@ -10,6 +10,16 @@
 
   <body>
 
+  <script>
+
+history.pushState(null, null, location.href);
+window.onpopstate = function(event) {
+    history.go(1);
+};  
+  
+  </script>
+
+
   <br>
 
   <h1>System Enter</h1>

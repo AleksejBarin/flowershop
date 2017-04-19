@@ -27,11 +27,14 @@ public class UserShopCart {
 	
 	private String status;	
 	
+	private String storage;
+	
 	public UserShopCart(User user, String userShopCartFlowername, int userShopCartCount){
 		this.user = user;
 		this.userShopCartFlowername = userShopCartFlowername;
 		this.userShopCartCount = userShopCartCount;	
 		this.status = "in batch";
+		this.storage = "main";
 	}
 	
 	public UserShopCart( ) {
@@ -51,6 +54,10 @@ public class UserShopCart {
 	public void setUser(User user){this.user = user;}
 	
 	public User getUser(){return this.user;}
+	
+	public void setStorage(String storage){this.storage = storage;}
+	
+	public String getStorage(){return this.storage;}
 	
 	public void setStatus(String status){this.status = status;}
 	
